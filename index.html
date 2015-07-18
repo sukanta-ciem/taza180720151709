@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Tazamandi</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script src="cordova.js"></script>
+<style type="text/css">
+* { margin:0; padding:0;}
+body {
+	background:#fff;
+}
+.body {
+	height: 100%;
+    position: fixed;
+    width: 100%;
+	z-index:-1;
+	background:#fff url(images/bg.jpg) no-repeat center bottom;
+	opacity: 0.4;
+    filter: alpha(opacity=40);
+}
+img {
+	border: none;
+	height: auto;
+	max-width: 100%;
+}
+.main_body {
+    height: 100%;
+    position: fixed;
+    width: 100%;
+}	
+.main_body td{
+    padding:10px;
+}
+td{
+	font:Tahoma, Geneva, sans-serif; font-size:14px; color:#333333; font-weight:bold;
+}
+.tryagain{
+	padding:5px; border:none; background:#FF8000; font:Tahoma, Geneva, sans-serif; font-size:14px; color:#333333; font-weight:bold; margin-top:5px; border-radius:5px;
+}
+</style>
+</head>
+<body onload="onDeviceReady();">
+<div class="body"></div>
+<table class="main_body">
+<tr><td valign="middle" align="center" id="tdLog"><img alt="" src="images/logo.png"  /></td></tr>
+</table>
+</body>
+</html>
+<script type="text/javascript">
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function win()
+{
+	var visited = localStorage.getItem('visited');
+	console.log(localStorage.getItem("visited"));
+	if(visited!='1'){
+	localStorage.setItem("visited", "1");
+	setTimeout(function(){ window.location.href='http://www.tazamandi.in/application/index.php'; }, 5000);
+	}else{
+	localStorage.removeItem("visited");
+	}
+}
+
+function fails()
+{
+	alert("Please Check your Internet Connection!");
+	var triedHtml='Check your Internet Connection and Try Again!<br /><input type="button" name="button" value="Try Again" onclick="doAgain();" class="tryagain" />';
+	$('#tdLog').html(triedHtml);
+}
+
+function onDeviceReady(){
+    $.ajax({
+         url:"http://www.tazamandi.in/appsajax/check_internet.php",
+         timeout:10000,   //timeout to 5s
+         type: "GET",
+         cache: false,
+		 dataType: 'jsonp'
+       }).fail(function(){
+       	fails();
+	   }).done(function(){
+       	win();
+	   });
+}
+
+function doAgain(){
+	window.location.href='index.html';
+}
+
+</script>
